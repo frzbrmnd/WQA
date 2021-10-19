@@ -1,0 +1,20 @@
+.rightAlignText{
+    text-align: right;
+}
+.leftAlignText{
+    text-align: left !important;
+}
+.boldText{
+    font-weight: bold;
+}
+.fontSize09{
+    font-size: 0.9rem;
+}
+.pointerOnHover:hover{
+    cursor: pointer;
+}
+.warning{
+    color: red;
+    display: none;
+    font-size: 0.8rem;
+}

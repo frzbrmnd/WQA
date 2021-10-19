@@ -1,0 +1,37 @@
+.navbar-expand-lg{
+    height: 58px;
+    background-color: #319FD3;
+    padding: 0 15px 0 25px;
+}
+h1{
+    margin: auto 0;
+    color: white;
+    font-weight: bold;
+}
+#options{
+    width: 120px;
+    background-color: #141140;
+    border: 1px solid #141140;
+}
+#options:active {
+  box-shadow: 0 0 0 5px #54858B;
+}
+#btnOptions{
+    display: inline-block;
+    width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    color: white;
+    outline:none;
+    margin: 0;
+    
+}
+#btnOptionsSVG {
+    color: white;
+  display: inline-block;
+  margin: 0;
+}

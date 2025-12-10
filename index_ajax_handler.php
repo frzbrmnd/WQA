@@ -11,6 +11,8 @@
             array_push($data, retriveData($id, "branch_1"));
             array_push($data, retriveData($id, "branch_2"));
             array_push($data, retriveData($id, "environmental"));
+            array_push($data, retriveVulSoc($id, "vulnerability"));
+            array_push($data, retriveVulSoc($id, "social"));
             echo json_encode($data);
         }
         if(isset($_POST["projectUser"]) && isset($_POST["projectName"])){
@@ -24,7 +26,7 @@
                 $tableName = "branch_1";
             }else if($_POST["tableName"] == "Branch #2"){
                 $tableName = "branch_2";
-            }else if($_POST["tableName"] == "Environmental Variables"){
+            }else if($_POST["tableName"] == "Meteorological and Reservoir Variables"){
                 $tableName = "environmental";
             }else{
                 $errorMessage = "wrong table name!";
@@ -35,7 +37,7 @@
             $projectName = test_input($_POST["tableProjectName"]);
             if(empty($errorMessage)){
                 $numberOfInsertedRows = insertDataIntoTable($tableName, $username, $projectName, $data);
-                echo "save table succsessfully";
+                echo "Table saved succsessfully";
             }else{
                 echo $errorMessage;
             }
@@ -185,12 +187,6 @@
             $projectName = test_input($_POST["activateResultTabProjectName"]);
             echo json_encode(getResults($username, $projectName));
         }
-        /*if(isset($_POST["insertResultsData"]) && isset($_POST["insertResultsUsername"]) && isset($_POST["insertResultsProjectName"])){        
-            $username = test_input($_POST["insertResultsUsername"]);
-            $projectName = test_input($_POST["insertResultsProjectName"]);
-            $results = array_values(json_decode($_POST["insertResultsData"], true));
-            echo insertResults($username, $projectName, $results);
-        }*/
         
         if(isset($_POST["insertResultsDO"]) && isset($_POST["insertResultsChla"]) && isset($_POST["insertResultsUsername"]) && isset($_POST["insertResultsProjectName"])){        
             $username = test_input($_POST["insertResultsUsername"]);
@@ -198,5 +194,19 @@
             $do = array_values(json_decode($_POST["insertResultsDO"], true));
             $chla = array_values(json_decode($_POST["insertResultsChla"], true));
             echo insertResults($username, $projectName, $chla, $do);
+        }
+        
+        if(isset($_POST["vulnerabilityUsername"]) && isset($_POST["vulnerabilityProjectName"]) && isset($_POST["vulnerabilityData"])){        
+            $username = test_input($_POST["vulnerabilityUsername"]);
+            $projectName = test_input($_POST["vulnerabilityProjectName"]);
+            $inputs = array_values(json_decode($_POST["vulnerabilityData"], true));
+            echo insertVulnerabilityInputs($username, $projectName, $inputs);
+        }
+        
+        if(isset($_POST["socialUsername"]) && isset($_POST["socialProjectName"]) && isset($_POST["socialData"])){        
+            $username = test_input($_POST["socialUsername"]);
+            $projectName = test_input($_POST["socialProjectName"]);
+            $inputs = array_values(json_decode($_POST["socialData"], true));
+            echo insertSocialInputs($username, $projectName, $inputs);
         }
     }

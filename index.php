@@ -43,6 +43,7 @@
                         deleteProject($projectName, $username);
                     }
                 }
+                break;
             case 'editProject':
                 if (empty($_POST["projectPreviousName"]) || empty($_POST["projectNewName"])) {
                     $editProjectErr = "Please enter project name.";
@@ -55,6 +56,7 @@
                         $editProjectErr = editProject($projectNewName, $projectPreviousName, $username);
                     }
                 }
+                break;
         }
     }
     $inviteLink = getInviteLink($username);
@@ -62,11 +64,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Water Quality Assessment</title>
+        <title>Javeh Reservoir</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
         <script src="./js/ol.js"></script>
-        <link rel="shortcut icon" href="#"> <!--for netbeans favicon error-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
@@ -87,7 +89,10 @@
     <body>   
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <h1 class="navbar-brand" href="#">Water Quality Assessment</h1>
+                <div class="row">
+                    <img src="./img/logo.png" alt="" width="30" height="30" class="col-auto d-inline-block align-text-top p-0">
+                    <h1 class="navbar-brand col-auto" href="#">Javeh Reservoir Water Quality and Quantity Assessment</h1>
+                </div>
                 <div class="dropdown">
                     <div id="options" class="btn btn-outline-success" data-bs-toggle="dropdown" aria-expanded="false">
                         <button id="btnOptions"><?php echo $_SESSION["username"]; ?></button>
@@ -137,7 +142,7 @@
             </ul>
         </div>
         
-        <div id="panelContainer" class="col-lg-2 col-md-3 col-sm-4 forSmallScreens">
+        <div id="panelContainer" class="col-lg-3 col-md-4 col-sm-5 forSmallScreens">
             <div id="togglePanelButton" class="pointerOnHover"><span id="togglePanelIcon" class="closePanelIcon"></span></div>
             <div id="coordinateContainer"><p id="coordinate"></p></div>
             <div id="panel" class="openPanel">
@@ -174,72 +179,107 @@
                     </div>
                 </div>
                 <div>
-                    <div class="row panelItemTitle justify-content-between m-0 mt-4">
+                    <div class="row panelItemTitle justify-content-between m-0 mt-3">
                         <div id="inputTab" class="tabHeader col-4 p-0 py-2 currentTabHeader pointerOnHover">Input</div>
                         <div id="resultTab" class="tabHeader col-4 p-0 py-2 pointerOnHover">Results</div>
                         <div id="legendTab" class="tabHeader col-4 p-0 py-2 pointerOnHover">Legend</div>
                     </div>
                     <div id="inputTabBody" class="tabBody m-0 currentTabBody p-2 mb-2">
-                        <div class="row justify-content-between align-items-center m-0 p-0 my-2"><spam class="col-6 p-0 fontSize09">Branch #1:</spam><div id="B1Button" class="btn inutDataBtn col-5 p-1 py-2 fontSize09">Enter Data</div></div>
-                        <div class="row justify-content-between align-items-center m-0 p-0 my-2"><spam class="col-6 p-0 fontSize09">Branch #2:</spam><div id="B2Button" class="btn inutDataBtn col-5 p-1 py-2 fontSize09">Enter Data</div></div>
-                        <div class="row justify-content-between align-items-center m-0 p-0 my-2"><spam class="col-6 p-0 fontSize09">Environmental variables:</spam><div id="ENVButton" class="btn inutDataBtn col-5 p-1 py-2 fontSize09">Enter Data</div></div>
-                        <div class="row justify-content-center align-items-center m-0 p-0 my-4"><button id="btnProcess" class="btn btn-primary col-10 p-1 py-2 fontSize09" style="border-radius: 20px; font-weight: bold;">Start Calculation</button></div>
+                        <div class="row justify-content-between align-items-center m-0 p-0 my-1"><spam class="col-6 p-0 fontSize09">Branch #1</spam><div id="B1Button" class="btn inputDataBtn col-auto p-1 py-2 fontSize09">Enter Data</div></div>
+                        <div class="row justify-content-between align-items-center m-0 p-0 my-1"><spam class="col-6 p-0 fontSize09">Branch #2</spam><div id="B2Button" class="btn inputDataBtn col-auto p-1 py-2 fontSize09">Enter Data</div></div>
+                        <div class="row justify-content-between align-items-center m-0 p-0 my-1"><spam class="col-6 p-0 fontSize09">Meteorological and Reservoir Variables</spam><div id="ENVButton" class="btn inputDataBtn col-auto p-1 py-2 fontSize09">Enter Data</div></div>
+                        <div class="row justify-content-between align-items-center m-0 p-0 my-1"><spam class="col-6 p-0 fontSize09">Vulnerability Assessment</spam><div id="vulButton" class="btn inputDataBtn col-auto p-1 py-2 fontSize09">Enter Data</div></div>
+                        <div class="row justify-content-between align-items-center m-0 p-0 my-1"><spam class="col-6 p-0 fontSize09">Social Water Stress Index</spam><div id="socButton" class="btn inputDataBtn col-auto p-1 py-2 fontSize09">Enter Data</div></div>
+                        <div class="row justify-content-center align-items-center m-0 p-0 mt-4 mb-1"><button id="btnProcess" class="btn btn-primary col-10 p-1 py-2 fontSize09" style="border-radius: 20px; font-weight: bold;">Start the Calculation</button></div>
                     </div>
                     <div id="resultTabBody" class="tabBody m-0 p-2 mb-2">
-                        <!--<div class="row m-0 p-0 my-2">Select Index type:</div>
+                        <div class="row m-0 p-0 my-1 boldText">Time series charts:</div>
+                        <div class="row m-0 p-0 my-2 justify-content-start">
+                            <button id="btnChartDo" class="btn btn-primary col-auto p-1 py-2 fontSize09 ms-2">DO output</button>
+                            <button id="btnChartChla" class="btn btn-primary col-auto p-1 py-2 fontSize09 ms-2">Chlorophyll-a</button>
+                        </div>
+                        <div class="row m-0 p-0 my-2 justify-content-start">
+                            <button id="btnChartCarlson" class="btn btn-primary col-auto p-1 py-2 fontSize09 ms-2">Carlson TSI</button>
+                        </div>
+                        <div class="row m-0 p-0 mt-3 mb-2 boldText">select trophic state evaluation method</div>
                         <div class="row m-0 p-0 my-2">
                             <div class="col-auto form-check pe-0">
-                                <input class="form-check-input" type="radio" name="indexType" id="carlson" value="carlson" disabled>
-                                <label class="form-check-label" for="carlson">Carlson</label>
+                                <input class="form-check-input" type="radio" name="indexType" id="carlson" value="carlson" disabled onchange="changeRadioIndexType(this)">
+                                <label class="form-check-label fontSize08" for="carlson">Carlson TSI</label>
                             </div>
                             <div class="col-auto form-check ms-2 pe-0">
-                                <input class="form-check-input" type="radio" name="indexType" id="wrv" value="wrv" disabled>
-                                <label class="form-check-label" for="wrv">WRV</label>
+                                <input class="form-check-input" type="radio" name="indexType" id="epa" value="epa" disabled onchange="changeRadioIndexType(this)">
+                                <label class="form-check-label fontSize08" for="epa">EPA Trophic State Classification</label>
                             </div>
-                        </div>-->
-                        <div class="row justify-content-between align-items-center m-0 p-0 my-2"><spam class="col-12 p-0">Results for each 5 day:</spam></div>
-                        <div class="range-wrap mx-2">
-                            <div class="range-value" id="rangeV">day number: <spam id="rangeValue"></spam></div>
-                            <input id="range" type="range" min="0" max="4" value="0" step="1" class="form-range row mx-0">
                         </div>
-                        <div class="row m-0 my-2"><spam class="col-auto p-0">EPA Class:</spam><spam id="epa_class" class="col-auto fw-bolder px-2">-</spam></div>
-                        <div class="row justify-content-between align-items-center m-0 p-0 my-3"><spam class="col-6 p-0 fontSize09">Carlson time series:</spam><button id="btnChart" class="btn btn-primary col-5 p-1 py-2 fontSize09">Show chart</button></div>
+                        <div class="row m-0 p-0 mt-3 mb-2 boldText">select water quantity evaluation method</div>
+                        <div class="row m-0 p-0 my-2">
+                            <div class="col-auto form-check pe-0">
+                                <input class="form-check-input" type="radio" name="indexType" id="wrv" value="wrv" disabled onchange="changeRadioIndexType(this)">
+                                <label class="form-check-label fontSize08" for="wrv">WRVI</label>
+                            </div>
+                            <div class="col-auto form-check ms-2 pe-0">
+                                <input class="form-check-input" type="radio" name="indexType" id="swsi" value="swsi" disabled onchange="changeRadioIndexType(this)">
+                                <label class="form-check-label fontSize08" for="swsi">SWSI</label>
+                            </div>
+                        </div>
+                        <div id="carlson_epa">
+                            <div class="row justify-content-between align-items-center m-0 p-0 mt-3 mb-1"><spam class="col-12 p-0 boldText">visualized results for the simulation period</spam></div>
+                            <div class="range-wrap mx-2">
+                                <div>Days: <spam id="dayNumber"></spam></div>
+                                <div><spam id="indexValueTitle">Value: </spam><spam id="indexValue"></spam></div>
+                                <input id="range" type="range" min="0" max="4" value="0" step="1" class="form-range row mx-0 mt-1">
+                            </div>
+                        </div>
+                        <div id="wrv_swsi">
+                            <div class="range-wrap mx-2">
+                                <div>Value: <spam id="ws_indexValue"></spam></div>
+                                <div>Category: <spam id="ws_indexCategory"></spam></div>
+                            </div>
+                        </div>
+                        <div id="detailsButtonRow" class="row justify-content-between align-items-center m-0 p-0 my-3"><spam class="col-6 p-0 fontSize09">Details of calculations:</spam><button id="btnDetails" class="btn btn-primary col-5 p-1 py-2 fontSize09">Show Details</button></div>
                     </div>
+                    
                     <div id="legendTabBody" class="tabBody m-0 p-2 mb-2">
                         <div class="row mx-0">
-                            <h4 class="m-0 ps-0">Branches</h4>
-                            <div class="row m-0 ps-3">
-                                <spam class="col-4 p-0"><small>Branch 1</small></spam>
-                                <div class="col p-0 ps-4">
-                                    <svg height="20" width="40">
-                                        <polyline points="0,5 15,15 25,5 40,15" style="fill:none;stroke:rgb(30,150,255);stroke-width:5" />
-                                        Sorry, your browser does not support inline SVG.
-                                    </svg>
+                            <div class="col-6 ps-0">
+                                <h4 class="m-0 ps-0">Branches</h4>
+                                <div class="row m-0 ps-3">
+                                    <spam class="col-auto p-0"><small>Branch 1</small></spam>
+                                    <div class="col-auto p-0 ps-4">
+                                        <svg height="20" width="40">
+                                            <polyline points="0,5 15,15 25,5 40,15" style="fill:none;stroke:rgb(30,150,255);stroke-width:5" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="row m-0 mt-2 ps-3">
+                                    <spam class="col-auto p-0"><small>Branch 2</small></spam>
+                                    <div class="col-auto p-0 ps-4">
+                                        <svg height="20" width="40">
+                                            <polyline points="0,5 15,15 25,5 40,15" style="fill:none;stroke:rgb(0,0, 255);stroke-width:5" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row m-0 mt-2 ps-3">
-                                <spam class="col-4 p-0"><small>Branch 2</small></spam>
-                                <div class="col p-0 ps-4">
-                                    <svg height="20" width="40">
-                                        <polyline points="0,5 15,15 25,5 40,15" style="fill:none;stroke:rgb(0,0, 255);stroke-width:5" />
-                                        Sorry, your browser does not support inline SVG.
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-4 mx-0">
-                            <h4 class="m-0 ps-0">Reservoir</h4>
-                            <div class="row m-0 ps-3">
-                                <spam class="col-4 p-0"><small>No Result</small></spam>
-                                <div class="col p-0 ps-4 pt-1">
+                            <div class="col-6 pe-0">
+                                <h4 class="m-0 ps-0">Reservoir</h4>
+                                <div class="row m-0 ps-3">
+                                <spam class="col-auto p-0"><small>No Result</small></spam>
+                                <div class="col-auto p-0 ps-4 pt-1">
                                     <svg height="30" width="40">
-                                    <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(100,100,100,0.6);stroke:black;stroke-width:1" />
+                                    <polygon points="1,1 39,1 39,19 1,19" style="fill:rgb(80,80,80);stroke:black;stroke-width:1" />
                                     Sorry, your browser does not support inline SVG.
                                 </svg>
                                 </div>
+                                </div>
                             </div>
+                        </div>
+                        <div class="row mt-2 mx-0">
+                            <h4 class="m-0 ps-0">Indices</h4>
                             <div class="row m-0 ps-3">
-                                <spam class="col-4 p-0"><small>DO output</small></spam>
+                                <spam class="col-4 p-0"><small>Carlson TSI</small></spam>
                                 <div class="col p-0 ps-2 mt-2">
                                     <svg height="60" width="220">
                                         <defs>
@@ -257,40 +297,128 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mt-4 mx-0 ps-3">
+                            <div class="col-6 p-0">
+                                <div class="row p-0 m-0 mb-1"><small class="p-0">WRVI</small></spam></div>
+                                <div class="row p-0 m-0">
+                                    <small class="col-8 ps-2 p-0">No vulnerability</small>
+                                    <div class="col-auto p-0 ps-3">
+                                        <svg height="30" width="40">
+                                            <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(0,255,0);stroke:black;stroke-width:1" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="row p-0 m-0">
+                                    <small class="col-8 ps-2 p-0">Low vulnerability</small>
+                                    <div class="col-auto p-0 ps-3">
+                                        <svg height="30" width="40">
+                                            <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(255,255,0);stroke:black;stroke-width:1" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="row p-0 m-0">
+                                    <small class="col-8 ps-2 p-0">Vulnerable</small>
+                                    <div class="col-auto p-0 ps-3">
+                                        <svg height="30" width="40">
+                                            <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(255,150,0);stroke:black;stroke-width:1" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="row p-0 m-0">
+                                    <small class="col-8 ps-2 p-0">High vulnerability</small>
+                                    <div class="col-auto p-0 ps-3">
+                                        <svg height="30" width="40">
+                                            <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(255,0,0);stroke:black;stroke-width:1" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 p-0 ps-3">
+                                <div class="row p-0 m-0 mb-1"><small class="p-0">EPA</small></div>
+                                <div class="row p-0 m-0">
+                                    <small class="col-6 ps-2 p-0">Oligotrophic</small>
+                                    <div class="col-auto p-0 ps-3">
+                                        <svg height="30" width="40">
+                                            <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(0,255,0);stroke:black;stroke-width:1" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="row p-0 m-0">
+                                    <small class="col-6 ps-2 p-0">Mesotrophic</small>
+                                    <div class="col-auto p-0 ps-3">
+                                        <svg height="30" width="40">
+                                            <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(255,255,0);stroke:black;stroke-width:1" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="row p-0 m-0">
+                                    <small class="col-6 ps-2 p-0">Eutrophic</small>
+                                    <div class="col-auto p-0 ps-3">
+                                        <svg height="30" width="40">
+                                            <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(255,0,0);stroke:black;stroke-width:1" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mx-0 ps-3">
+                            <div class="col-8 p-0">
+                                <div class="row p-0 m-0 mb-1"><small class="p-0">SWSI</small></spam></div>
+                                <div class="row p-0 m-0">
+                                    <small class="col-8 ps-2 p-0">No stress</small>
+                                    <div class="col-auto p-0 ps-3">
+                                        <svg height="30" width="40">
+                                            <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(0,255,0);stroke:black;stroke-width:1" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="row p-0 m-0">
+                                    <small class="col-8 ps-2 p-0">Water scarcity</small>
+                                    <div class="col-auto p-0 ps-3">
+                                        <svg height="30" width="40">
+                                            <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(255,255,0);stroke:black;stroke-width:1" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="row p-0 m-0">
+                                    <small class="col-8 ps-2 p-0">Water stress</small>
+                                    <div class="col-auto p-0 ps-3">
+                                        <svg height="30" width="40">
+                                            <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(255,150,0);stroke:black;stroke-width:1" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="row p-0 m-0">
+                                    <small class="col-8 ps-2 p-0">Absolute water stress</small>
+                                    <div class="col-auto p-0 ps-3">
+                                        <svg height="30" width="40">
+                                            <polygon points="1,1 39,1 39,19 1,19" style="fill:rgba(255,0,0);stroke:black;stroke-width:1" />
+                                            Sorry, your browser does not support inline SVG.
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div id="inputContainer" class="col-8 px-3 narrowInputContainer">
             <div id="inputContainerTitle" class="row justify-content-between p-2">
-                <h3 id="spreadSheetTitle" class="col-5 ps-3 m-0">Branch #1</h3>
+                <h3 id="spreadSheetTitle" class="col-auto ps-3 m-0">Branch #1</h3>
                 <div class="col-1 my-auto rightAlignText boldText"><spam class="pointerOnHover" id="close">X</spam></div>
             </div>
             <div id="tableContainer" class="mt-4 mb-4">
-                <!--<table id="inputTable" class="table table-striped">
-                    <thead>
-                        <tr id="barnchesHeading">
-                            <th scope="col" class="firstColumn"># of Day</th>
-                            <th scope="col" class="otherColumns">Temp</th>
-                            <th scope="col" class="otherColumns">PO4</th>
-                            <th scope="col" class="otherColumns">NH4</th>
-                            <th scope="col" class="otherColumns">NO3</th>
-                            <th scope="col" class="otherColumns">CBOD</th>
-                            <th scope="col" class="otherColumns">alga</th>
-                            <th scope="col" class="otherColumns">DO</th>
-                        </tr>
-                        <tr id="EnvironmentalHeading">
-                            <th scope="col" class="firstColumn"># of Day</th>
-                            <th scope="col" class="otherColumns">T_air</th>
-                            <th scope="col" class="otherColumns">Wind</th>
-                            <th scope="col" class="otherColumns">Q_out</th>
-                            <th scope="col" class="otherColumns">elevation</th>
-                        </tr>
-                    </thead>
-                    <tbody id="B1SpreadSheet"></tbody>
-                    <tbody id="B2SpreadSheet"></tbody>
-                    <tbody id="EnvironmentalSpreadSheet"></tbody>
-                </table>-->
                 <div id="B1_sp" class="customSpreadSheet"></div>
                 <div id="B2_sp" class="customSpreadSheet"></div>
                 <div id="Env_sp" class="customSpreadSheet"></div>
@@ -298,7 +426,6 @@
             <div class="row justify-content-start m-0">
                 <div id="moreRows" class="col-auto btn btn-secondary">Adding 5 more rows</div>
                 <div id="deleteRow" class="col-auto btn btn-secondary ms-3">Delete last row</div>
-                <!--<div id="exportInputs" class="col-auto btn btn-secondary ms-3">Export to Excel</div>-->
             </div>
             <div class="row justify-content-end my-4 me-0">
                 <div id="cancel" class="col-1 btn btn-danger me-2">Cancel</div>
@@ -390,6 +517,104 @@
                         <button class="col-auto btn btn-primary me-3" onclick="copyInviteLink()">Copy link</button>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div id="vulModal" class="col-7">
+            <div class="row">
+                <div>
+                    <div class="row justify-content-between m-0 mt-3 pb-3 align-items-center modalHeader">
+                        <h3 class="col-auto m-0">Vulnerability Assessment Parameters</h3>
+                        <button id="close1" type="button" class="btn-close col-auto me-3" onclick="hideModal(this)"></button>
+                    </div>
+                    <div class="row justify-content-between m-0 mt-3 pb-3 align-items-center">
+                        <p id="inviteLink">Description: Water Resource Vulnerability index (WRVI)
+                            consists of three separate water resource stress indices and weighs them equally.
+                            The higher the value of the WRVI, the more vulnerable is the water resource.
+                        </p>
+                    </div>
+                    <div class="row justify-content-between m-0 mt-2 pb-3 align-items-center">
+                        <div class="col">
+                            <label for="username" class="form-label">Reservoir Storage Capacity (m<sup>3</sup>)</label>
+                            <input id="reservoirStorageCapacity" type="number" class="form-control vulnerability" name="reservoirStorageCapacity">
+                        </div>
+                        <div class="col">
+                            <label for="username" class="form-label">Average Annual Supply (m<sup>3</sup>)</label>
+                            <input id="averageAnnualSupply" type="number" class="form-control vulnerability" name="averageAnnualSupply">
+                        </div>
+                        <div class="col">
+                            <label for="username" class="form-label">Mean Annual Precipitation (mm)</label>
+                            <input id="meanAnnualPrecipitation" type="number" class="form-control vulnerability" name="meanAnnualPrecipitation">
+                        </div>
+                    </div>
+                    <div class="row justify-content-between m-0 mt-2 pb-3 align-items-center">
+                        <div class="col">
+                            <label for="username" class="form-label">External sources water supply (%)</label>
+                            <input id="importDependence" type="number" class="form-control vulnerability" name="importDependence">
+                        </div>
+                        <div class="col">
+                            <label for="username" class="form-label">Annual water withdrawals (m<sup>3</sup>)</label>
+                            <input id="annualWaterWithdrawals" type="number" class="form-control vulnerability" name="annualWaterWithdrawals">
+                        </div>
+                        <div class="col">
+                            <label for="username" class="form-label">GNP/capita</label>
+                            <input id="GNP_capita" type="number" class="form-control vulnerability" name="GNP_capita">
+                        </div>
+                    </div>
+                    <div class="row justify-content-between m-0 mt-2 pb-3 align-items-center">
+                        <div class="col">
+                            <label for="username" class="form-label">Standard Deviation of Annual Precipitation (mm)</label>
+                            <input id="standardDeviationOfAnnualPrecipitation" type="number" class="form-control vulnerability" name="standardDeviationOfAnnualPrecipitation">
+                        </div>
+                        <div class="col">
+                            <label for="username" class="form-label">Annual Renewable water resources (m<sup>3</sup>)</label>
+                            <input id="annualRenewableWaterResources" type="number" class="form-control vulnerability" name="annualRenewableWaterResources">
+                        </div>
+                    </div>
+                    <div class="row justify-content-end m-0 pt-3 mb-3 align-items-center modalFooter">
+                        <button id="close2" type="button" class="col-auto btn btn-danger me-2" onclick="hideModal(this)">Close</button>
+                        <button class="col-auto btn btn-primary me-3" onclick="saveVul()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="socModal" class="col-7">
+            <div class="row">
+                <div>
+                    <div class="row justify-content-between m-0 mt-3 pb-3 align-items-center modalHeader">
+                        <h3 class="col-auto m-0">Social Water Stress Index (SWSI)</h3>
+                        <button id="close1" type="button" class="btn-close col-auto me-3" onclick="hideModal(this)"></button>
+                    </div>
+                    <div class="row justify-content-between m-0 mt-3 pb-3 align-items-center">
+                        <p id="inviteLink">Description: Social water stress index reflects political,
+                            educational, and social effects on adapting to water shortage.
+                        </p>
+                    </div>
+                    <div class="row justify-content-between m-0 mt-2 pb-3 align-items-center">
+                        <div class="col">
+                            <label for="username" class="form-label">Renewable internal freshwater resources per capita (m<sup>3</sup>)</label>
+                            <input id="renewableInternalFreshwaterResourcesPerCapita" type="number" class="form-control social" name="renewableInternalFreshwaterResourcesPerCapita">
+                        </div>
+                        <div class="col">
+                            <label for="username" class="form-label">Human Development Index (HDI)</label>
+                            <input id="HumanDevelopmentIndex" type="number" class="form-control social" name="HumanDevelopmentIndex">
+                        </div>
+                    </div>
+                    <div class="row justify-content-end m-0 pt-3 mb-3 align-items-center modalFooter">
+                        <button id="close2" type="button" class="col-auto btn btn-danger me-2" onclick="hideModal(this)">Close</button>
+                        <button class="col-auto btn btn-primary me-3" onclick="saveSoc()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="calculationContainer" class="col-8 px-3 narrowInputContainer">
+            <div id="calculationContainerTitle" class="row justify-content-between p-2">
+                <h3 id="calculationSpreadSheetTitle" class="col-auto ps-3 m-0">EPA Details</h3>
+                <button id="closeCalculationContainer" class="btn-close col-auto" onclick="closeCalculationContainer()"></button>
+            </div>
+            <div id="calculationTableContainer" class="mt-4 mb-4">
+                <div id="epa_sp" class="customSpreadSheet"></div>
+                <div id="wrv_sp" class="customSpreadSheet"></div>
+                <div id="swsi_sp" class="customSpreadSheet"></div>
             </div>
         </div>
         <div id="chart" class="row justify-content-end">

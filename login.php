@@ -34,11 +34,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Login | Water Quality Assessment</title>
+        <title>Login | Javeh Reservoir</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        
-        <link rel="shortcut icon" href="#"> <!--for netbeans favicon error-->
+        <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <link rel="stylesheet" href="./css/globalClasses.css" type="text/css">
@@ -56,15 +55,15 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <div class="row m-5">
-            <div class="col-7">
-                <div id="introduction" class="mt-5">
-                    <h1 class="p-3">Lorem Impsum</h1>
-                    <p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur.
+            <div class="col-7 pt-3">
+                <div id="introduction" class="mt-5 pb-4">
+                    <h1 class="p-3">Javeh Water Quality and Vulnerability Assessment</h1>
+                    <p class="px-3">This Web application has been developed for non-expert decision-makers and stakeholders
+                        who are directly and indirectly engaged in water quality monitoring and management.
+                        This web application can compute several quality indices related to trophic state and quantity indices related to vulnerability.
+                        Two surrogate models are provided to predict the quality parameters.
+                        The results are visualized using the state-of-the-art JavaScript chart library.
+                        To make it even more user-friendlier, a complete walkthrough has been provided for new users.  
                     </p>
                 </div>
             </div>
@@ -73,11 +72,11 @@
                     <div id="title" class="col-10 mt-5 mb-4"><h1>Login</h1></div>
                     <div class="col-10 mb-3">
                         <label for="username" class="form-label">Username</label>
-                        <input id="username" type="text" class="form-control" placeholder="username" aria-label="username" name="username" required>
+                        <input id="username" type="text" class="form-control" placeholder="Username" aria-label="username" name="username" required>
                     </div>
                     <div class="col-10">
                         <label for="password" class="form-label">Password</label>
-                        <input id="password" type="password" class="form-control" placeholder="password" aria-label="password" name="password" required>
+                        <input id="password" type="password" class="form-control" placeholder="Password" aria-label="password" name="password" required>
                     </div>
                     <div class="col-10 d-flex justify-content-start mb-3">
                         <p id="warningPasswordLogin" class="warning"><?php echo $errorMessage2; ?></p>

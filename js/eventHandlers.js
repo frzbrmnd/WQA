@@ -68,26 +68,6 @@ function activateDrawingAndSelect(idSelf, idParent){
     document.getElementById(idSelf).classList.add("boldBackground");
 }
 //toggle input table
-/*document.getElementById("B1Button").addEventListener("click", function(){
-    showPopup("B1SpreadSheet", "barnchesHeading", "B2SpreadSheet", "EnvironmentalSpreadSheet", "EnvironmentalHeading", "Branch #1");
-});
-document.getElementById("B2Button").addEventListener("click", function(){
-    showPopup("B2SpreadSheet", "barnchesHeading", "B1SpreadSheet", "EnvironmentalSpreadSheet", "EnvironmentalHeading", "Branch #2");
-});
-document.getElementById("ENVButton").addEventListener("click", function(){
-    showPopup("EnvironmentalSpreadSheet", "EnvironmentalHeading", "B2SpreadSheet", "B1SpreadSheet", "barnchesHeading", "Environmental Variables");
-});
-function showPopup(tbodyId_main, theadId_main, tbodyId_1, tbodyId_2, theadId_1, spreadSheetTitle){
-    document.getElementById("inputContainer").style.display = "block";
-    document.getElementById(tbodyId_main).style.display = "table-row-group";
-    myTable = document.getElementById(tbodyId_main);
-    document.getElementById(theadId_main).style.display = "table-row";
-    document.getElementById(tbodyId_1).style.display = "none";
-    document.getElementById(tbodyId_2).style.display = "none";
-    document.getElementById(theadId_1).style.display = "none";
-    document.getElementById("spreadSheetTitle").innerHTML = spreadSheetTitle;
-}*/
-
 document.getElementById("B1Button").addEventListener("click", function(){
     showPopup("B1_sp", "B2_sp", "Env_sp", "Branch #1");
 });
@@ -95,7 +75,13 @@ document.getElementById("B2Button").addEventListener("click", function(){
     showPopup("B2_sp", "B1_sp", "Env_sp", "Branch #2");
 });
 document.getElementById("ENVButton").addEventListener("click", function(){
-    showPopup("Env_sp", "B2_sp", "B1_sp", "Environmental Variables");
+    showPopup("Env_sp", "B2_sp", "B1_sp", "Meteorological and Reservoir Variables");
+});
+document.getElementById("vulButton").addEventListener("click", function(){
+    showVulModal();
+});
+document.getElementById("socButton").addEventListener("click", function(){
+    showSocModal();
 });
 function showPopup(sp1, sp2, sp3, spreadSheetTitle){
     document.getElementById("inputContainer").style.display = "block";
@@ -103,6 +89,8 @@ function showPopup(sp1, sp2, sp3, spreadSheetTitle){
     document.getElementById(sp1).style.display = "block";
     document.getElementById(sp2).style.display = "none";
     document.getElementById(sp3).style.display = "none";
+    document.getElementById("vulModal").style.display = "none";
+    document.getElementById("socModal").style.display = "none";
     document.getElementById("spreadSheetTitle").innerHTML = spreadSheetTitle;
 }
 
@@ -119,7 +107,7 @@ document.getElementById("togglePanelButton").addEventListener('click', function 
     } else {
         panel.classList.add("openPanel");
         panel.style.display = "block";
-        document.getElementById("panelContainer").className = "col-lg-2 col-md-3 col-sm-4 forSmallScreens";
+        document.getElementById("panelContainer").className = "col-lg-3 col-md-4 col-sm-5 forSmallScreens";
         document.getElementById("inputContainer").className = "col-8 px-3 narrowInputContainer";
     }
 });

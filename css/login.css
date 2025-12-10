@@ -7,17 +7,22 @@ html, body{
     min-width: 1200px;  
 }
 body{
-    background-image: linear-gradient(to top left, #141518, rgba(44, 154, 153, 0.7));
+    background-image: url('../img/Background.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
 }
 #introduction{
-    border-radius: 5px;
-    text-align: justify;
-    text-justify: inter-word;
+    border-radius: 15px;
     font-size: 1.3rem;
+    color: #EDECEA;
+    background-color: rgba(20, 20, 20, 0.85);
+    
 }
 #introduction p{
     overflow-y: auto;
-    height: 400px;
+    text-align: justify;
+    text-justify: inter-word;
 }
 /* width */
 #introduction p::-webkit-scrollbar {
@@ -39,7 +44,7 @@ body{
 }
 #loginForm{
     border-radius: 10px;
-    background-color: white;
+    background-color: rgba(245, 245, 245, 0.85);
 }
 #title h1{
     text-align: center;

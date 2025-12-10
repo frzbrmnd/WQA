@@ -218,11 +218,11 @@ body{
 .currentTabBody{
     display: block !important;
 }
-.inutDataBtn{
+.inputDataBtn{
     background-color: #423f3f;
     color: white;
 }
-.inutDataBtn:hover{
+.inputDataBtn:hover{
     background-color: #282626;
     color: white;
 }
@@ -295,6 +295,28 @@ body{
     transform: translate(-50%, -50%);
     background-color: white;
 }
+#vulModal{
+    display: none;
+    z-index: 2;
+    border-radius: 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: rgba(200, 230, 250, 0.9);
+}
+#socModal{
+    display: none;
+    z-index: 2;
+    border-radius: 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: rgba(200, 230, 250, 0.9);
+}
 .modalHeader{
     border-bottom: 1px dashed grey;
 }
@@ -357,4 +379,17 @@ input[type=range]::-webkit-slider-thumb {
 
 .form-check .form-check-input {
     margin-left: -1.2em !important;
+    width: 0.8em !important;
+    height: 0.8em !important;
+}
+
+#detailsButtonRow, #wrv_swsi{
+    display: none;
+}
+
+#calculationContainer{
+    position: absolute;
+    background-color: rgba(200, 230, 250, 0.9);
+    border-radius: 10px;
+    display: none;
 }

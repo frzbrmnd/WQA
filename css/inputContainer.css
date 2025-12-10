@@ -1,6 +1,6 @@
 #inputContainer{
     position: absolute;
-    background-color: rgba(200, 230, 250, 0.5);
+    background-color: rgba(200, 230, 250, 0.9);
     border-radius: 10px;
     display: none;
 }
@@ -70,11 +70,17 @@ input[type=number]{
 }
 
 .customSpreadSheet{
-    
     display: none;
     padding: 0 !important;
 }
 
 .jexcel_content{
     padding: 0 !important;
+}
+
+#calculationTableContainer{
+    overflow-y: auto;
+    max-height: 220px;
+    border: 1px solid black;
+    text-align: center;
 }

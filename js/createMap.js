@@ -1,12 +1,16 @@
 /* global ol, Infinity */
-const bing = new ol.layer.Tile({
+/*const bing = new ol.layer.Tile({
       preload: Infinity,
       zIndex: 0,
       source: new ol.source.BingMaps({
         key: 'AudsBZ_uT9DN3PECvgnmzwQRPSkVOwalsp7ZwqfHvu1RU6nP_eh-8lCJja5FGnPq',
         imagerySet: "AerialWithLabelsOnDemand"
       })
-    });
+    });*/
+const bing = new ol.layer.Tile({
+    title: "Google Satellite & Roads",
+    source: new ol.source.TileImage({ url: 'http://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}' }),
+});
 var riverStroke = new ol.style.Stroke({
     width: 5
 });
@@ -14,7 +18,7 @@ var riverStyle = new ol.style.Style({
     stroke: riverStroke
 });
 
-const setRiversStyle = function (feature) {
+const setRiversStyle = function (feature, value) {
     const layer = feature.get("layer");
     riverStroke.setColor(layer === 'branch_1' ? "#1e83ff" : '#0000FF');
     return riverStyle;
@@ -41,10 +45,10 @@ const reservoir = new ol.layer.Vector({
     }),
     style: new ol.style.Style({
         fill: new ol.style.Fill({
-            color: 'rgba(80, 80, 80, 0.6)'
+            color: 'rgba(80, 80, 80)'
         }),
         stroke: new ol.style.Stroke({
-            color: '#001dff',
+            color: 'black',
             width: 1
         })
     })

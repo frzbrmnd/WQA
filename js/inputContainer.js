@@ -1,30 +1,5 @@
 /* global XLSX, jspreadsheet */
 
-/*var myTable = document.getElementById("B1SpreadSheet");
-function createEmptyRows(){
-    var numberOfColumns;
-    if (myTable.id === "B1SpreadSheet" || myTable.id === "B2SpreadSheet"){
-        numberOfColumns = 8;
-    }else{
-        numberOfColumns = 5;
-    }
-    var tableRowsNumber = myTable.rows.length;
-    for (var i=tableRowsNumber; i<tableRowsNumber+5; i++){
-        var newRow = myTable.insertRow(i);
-        var dayCell = newRow.insertCell(0);
-        dayCell.innerHTML = i+1;
-        dayCell.setAttribute("class", "firstColumn");
-        for (var j=1; j<numberOfColumns; j++){
-            var newCell = newRow.insertCell(j);
-            var input = document.createElement("INPUT");
-            input.setAttribute("type", "number");
-            newCell.appendChild(input);
-            newCell.setAttribute("class", "otherColumns");
-        }
-    }
-}
-document.getElementById("moreRows").addEventListener("click", createEmptyRows);*/
-
 var myTable = document.getElementById("B1_sp");
 function createEmptyRows(){
     if (myTable.id === "B1_sp"){
@@ -48,8 +23,6 @@ function deleteLastRow(){
 }
 document.getElementById("deleteRow").addEventListener("click", deleteLastRow);
 
-
-
 document.getElementById("cancel").addEventListener("click", function(){
     document.getElementById("inputContainer").style.display = "none";
 });
@@ -57,95 +30,9 @@ document.getElementById("close").addEventListener("click", function(){
     document.getElementById("inputContainer").style.display = "none";
 });
 
-
-
-/*function saveTable(){
-    var tableName = document.getElementById("spreadSheetTitle").innerHTML;
-    const tableData = new Array();
-    if(tableName === "Branch #1"){
-        var table = document.getElementById("B1SpreadSheet");
-    }else if (tableName === "Branch #2"){
-        var table = document.getElementById("B2SpreadSheet");
-    }else{
-        var table = document.getElementById("EnvironmentalSpreadSheet");
-    }
-    for (var i=0; i<table.rows.length; i++){
-        var tableRow = new Array();
-        tableRow.push(table.rows[i].cells[0].innerHTML);
-        for (var j=1; j<table.rows[0].cells.length; j++){
-            if(table.rows[i].cells[j].childNodes[0].value === ""){
-                alert("please complete the table");
-                return false;
-            }
-            tableRow.push(table.rows[i].cells[j].childNodes[0].value);
-        }
-        tableData.push(tableRow);
-    }   
-    $.ajax({
-        type : "POST",
-        url : "index_ajax_handler.php",
-        data: {
-            tableName: tableName,
-            tableData: JSON.stringify(tableData),
-            tableUser: document.getElementById("btnOptions").innerHTML,
-            tableProjectName: document.getElementsByClassName("currentProject")[0].childNodes[0].innerHTML
-        },
-        dataType: 'text',
-        success : function(response) {
-            alert(response);
-        },
-        error: function(xhr) { 
-            alert(xhr);
-        }
-    });
+function closeCalculationContainer(){
+    document.getElementById("calculationContainer").style.display = "none";
 }
-function ExportToExcel(type, fn, dl) {
-    var tableName = document.getElementById("spreadSheetTitle").innerHTML;
-    var name = "";
-    var elt = "";
-    if(tableName === "Branch #1"){
-        elt = createCopyTable("B1SpreadSheet");
-        name = "Branch_1";
-    }else if (tableName === "Branch #2"){
-        elt = createCopyTable("B2SpreadSheet");
-        name = "Branch_2";
-    }else{
-        elt = createCopyTable("EnvironmentalSpreadSheet");
-        name = "Environmental";
-    }
-    var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
-    elt.remove();
-    return dl ?
-        XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
-        XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
-}
-document.getElementById("exportInputs").addEventListener("click", function(){
-    ExportToExcel('xlsx');
-});
- function createCopyTable(tableId){
-    var mainTableBody = document.getElementById(tableId);
-    var copyTable = document.createElement("table");
-    var copyTableHeader = "";
-    if(tableId === "EnvironmentalSpreadSheet"){
-        var mainTableHeader = document.getElementById("EnvironmentalHeading");
-        copyTableHeader = mainTableHeader.cloneNode(true);
-    }else{
-        var mainTableHeader = document.getElementById("barnchesHeading");
-        copyTableHeader = mainTableHeader.cloneNode(true);
-    }
-    copyTable.append(copyTableHeader);
-    for (var i=1; i<=mainTableBody.rows.length; i++){
-            var newRow = copyTable.insertRow(i);
-            var dayCell = newRow.insertCell(0);
-            dayCell.innerHTML = mainTableBody.rows[i-1].cells[0].innerHTML;
-            for (var j=1; j<mainTableBody.rows[0].cells.length; j++){
-                var newCell = newRow.insertCell(j);
-                newCell.innerHTML = mainTableBody.rows[i-1].cells[j].childNodes[0].value;
-            }
-        }   
-    return copyTable;
- }*/
-
 
 function saveTable(){
     var tableName = document.getElementById("spreadSheetTitle").innerHTML;
@@ -163,18 +50,6 @@ function saveTable(){
         alert(errorMessage);
         return false;
     }
-    /*for (var i=0; i<table.getData().length; i++){
-        var tableRow = new Array();
-        tableRow.push(i+1);
-        for (var j=1; j<table.rows[0].cells.length; j++){
-            if(table.rows[i].cells[j].childNodes[0].value === ""){
-                alert("please complete the table");
-                return false;
-            }
-            tableRow.push(table.rows[i].cells[j].childNodes[0].value);
-        }
-        tableData.push(tableRow);
-    }*/   
     $.ajax({
         type : "POST",
         url : "index_ajax_handler.php",
@@ -186,6 +61,11 @@ function saveTable(){
         },
         dataType: 'text',
         success : function(response) {
+            if(tableName === "Branch #1"){
+                data_branch_1 = tableData;
+            }else if (tableName === "Branch #2"){
+                data_branch_2 = tableData;
+            }
             alert(response);
         },
         error: function(xhr) { 
@@ -195,17 +75,15 @@ function saveTable(){
 }
 
 function checkTable(tableData){
-    alert(tableData[0].length);
     if (tableData.length%5 !== 0){
         return("Invalid inputs. you need to enter data for 5 days or multiple of 5 days");
     }
-    var pattern = /[^0-9.]/g;
     for (var i=0; i<tableData.length; i++){
         for (var j=0; j<tableData[0].length; j++){
             if (tableData[i][j] === ""){
                 return("The table is incomplete. Please fill in all values");
             }else if (!isNumeric(tableData[i][j])){
-                return("Invalid inputs");
+                return("Invalid inputs at row " + i+1 + "and column " + j+1);
             }                
         }
     }
@@ -220,75 +98,82 @@ function isNumeric(str) {
 
 var B1 = jspreadsheet(document.getElementById('B1_sp'), {
     minDimensions: [4, 5],
-    defaultColWidth: 130,
+    defaultColWidth: 110,
     tableOverflowY: true,
     allowInsertColumn:false,
     allowDeleteColumn:false,
     columns: [
         {
             type: 'numeric',
-            title:'Temp'
+            title:'Q_in (m\u00B3/s)'
         },
         {
             type: 'numeric',
-            title:'PO4'
+            title:'Temp (\u00B0C)'
         },
         {
             type: 'numeric',
-            title:'NH4'
+            title:'PO4 (mg/l)'
         },
         {
             type: 'numeric',
-            title:'NO3'
+            title:'NH4 (mg/l)'
         },
         {
             type: 'numeric',
-            title:'CBOD'
+            title:'NO3 (mg/l)'
         },
         {
             type: 'numeric',
-            title:'alga'
+            title:'CBOD (mg/l)'
         },
         {
             type: 'numeric',
-            title:'DO'
+            title:'alga (mg/l)'
+        },
+        {
+            type: 'numeric',
+            title:'DO (mg/l)'
         }
      ]
 });
 var B2 = jspreadsheet(document.getElementById('B2_sp'), {
     minDimensions: [4, 5],
-    defaultColWidth: 130,
+    defaultColWidth: 110,
     tableOverflowY: true,
     allowInsertColumn:false,
     allowDeleteColumn:false,
     columns: [
         {
             type: 'numeric',
-            title:'Temp'
+            title:'Q_in (m\u00B3/s)'
+        },{
+            type: 'numeric',
+            title:'Temp (\u00B0C)'
         },
         {
             type: 'numeric',
-            title:'PO4'
+            title:'PO4 (mg/l)'
         },
         {
             type: 'numeric',
-            title:'NH4'
+            title:'NH4 (mg/l)'
         },
         {
             type: 'numeric',
-            title:'NO3'
+            title:'NO3 (mg/l)'
         },
         {
             type: 'numeric',
-            title:'CBOD'
+            title:'CBOD (mg/l)'
         },
         {
             type: 'numeric',
-            title:'alga'
+            title:'alga (mg/l)'
         },
         {
             type: 'numeric',
-            title:'DO'
+            title:'DO (mg/l)'
         }
      ]
 });
@@ -301,19 +186,114 @@ var Env = jspreadsheet(document.getElementById('Env_sp'), {
     columns: [
         {
             type: 'numeric',
-            title:'T_air'
+            title:'T_air (\u00B0C)'
         },
         {
             type: 'numeric',
-            title:'Wind'
+            title:'Wind (m/s)'
         },
         {
             type: 'numeric',
-            title:'Q_out'
+            title:'Q_out (m\u00B3/s)'
         },
         {
             type: 'numeric',
-            title:'elevation'
+            title:'elevation (m)'
         }
      ]
+});
+
+var epaTable = jspreadsheet(document.getElementById('epa_sp'), {
+    minDimensions: [2, 1],
+    defaultColWidth: 150,
+    tableOverflowY: true,
+    allowInsertColumn:false,
+    allowDeleteColumn:false,
+    allowInsertRow:false,
+    allowDeleteRow:false,
+    columns: [
+        {
+            type: 'text',
+            title:'Day'
+        },
+        {
+            type: 'numeric',
+            title:'%DO'
+        },
+        {
+            type: 'numeric',
+            title:'chlorophyll-a (mg/m3'
+        },
+        {
+            type: 'numeric',
+            title:'Trophic State'
+        }
+     ]
+});
+
+var swsiTable = jspreadsheet(document.getElementById('swsi_sp'), {
+    defaultColWidth: 250,
+    tableOverflowY: true,
+    allowInsertColumn:false,
+    allowDeleteColumn:false,
+    allowInsertRow:false,
+    allowDeleteRow:false,
+    columns: [
+        {
+            type: 'text',
+            title:'HWSI (people/flow units)'
+        },
+        {
+            type: 'text',
+            title:'SWSI (people/flow units)'
+        },
+        {
+            type: 'text',
+            title:'Category'
+        }
+     ]
+});
+
+var wrvTable = jspreadsheet(document.getElementById('wrv_sp'), {
+    defaultColWidth: 230,
+    tableOverflowY: true,
+    allowInsertColumn:false,
+    allowDeleteColumn:false,
+    allowInsertRow:false,
+    allowDeleteRow:false,
+    columns: [
+        {
+            type: 'text',
+            title:'storage-to-flow'
+        },
+        {
+            type: 'text',
+            title:'coef of varaition of percipitation'
+        },
+        {
+            type: 'text',
+            title:'import dependence'
+        },
+        {
+            type: 'text',
+            title: 'use-to-resource Ratio'
+        },
+        {
+            type: 'text',
+            title: 'Coping Capacity'
+        },
+        {
+            type: 'text',
+            title: 'Vulnerability Index'
+        }
+     ],
+     
+     
+    nestedHeaders:[
+        {
+            title: 'Reliability Index',
+            colspan: '3'
+        },
+        
+    ]
 });

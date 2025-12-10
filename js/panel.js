@@ -1,8 +1,7 @@
 /* global drawingSource, ol, JSC, reservoir, Env, B1, B2 */
-var carlson;
-var epa;
-var wrv;
-                
+
+var data_branch_1;
+var data_branch_2;
 if (window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
 }
@@ -32,6 +31,16 @@ function copyInviteLink(){
 function showInviteModal(){
     document.getElementById("disableDiv").style.display = "block";
     document.getElementById("inviteModal").style.display = "block";
+}
+function showVulModal(){
+    document.getElementById("vulModal").style.display = "block";
+    document.getElementById("inputContainer").style.display = "none";
+    document.getElementById("socModal").style.display = "none";
+}
+function showSocModal(){
+    document.getElementById("socModal").style.display = "block";
+    document.getElementById("inputContainer").style.display = "none";
+    document.getElementById("vulModal").style.display = "none";
 }
 window.onload = function() {
     initialize();
@@ -90,7 +99,6 @@ function createListOfProjects(projectsIdAndName){
         listItem.appendChild(editButton);
         listItem.appendChild(deleteButton);
     }
-    //initializeResultTab();
 }
 function changeCurrentProject(element){
     document.getElementsByClassName("currentProject")[0].classList.remove("currentProject");
@@ -126,12 +134,11 @@ function loadData(id){
         dataType: 'text',
         success : function(response) {
             var data = JSON.parse(response);
-            //fillTables(data[0], "B1SpreadSheet");
-            //fillTables(data[1], "B2SpreadSheet");
-            //fillTables(data[2], "EnvironmentalSpreadSheet");
-            fillTables(data[0], B1);
-            fillTables(data[1], B2);
+            fillTables(data[0], B1, "Branch #1");
+            fillTables(data[1], B2, "Branch #2");
             fillTables(data[2], Env);
+            fillVul(data[3]);
+            fillSoc(data[4]);
         },
         error: function(xhr) { 
             
@@ -139,52 +146,7 @@ function loadData(id){
     });
 }
 
-/*function initializeResultTab(){                                                       //TBA
-    $.ajax({
-        type : "POST",
-        url : "index_ajax_handler.php",
-        data: {
-            activateResultTabUsername: document.getElementById("btnOptions").innerHTML,
-            activateResultTabProjectName: document.getElementsByClassName("currentProject")[0].childNodes[0].innerHTML
-        },
-        dataType: 'text',
-        success : function(response) {
-            var results = JSON.parse(response);
-            if (!results){
-                document.getElementById("btnChart").disabled = true;
-                document.getElementById("range").disabled = true;
-            }else{
-                document.getElementById("btnChart").disabled = false;
-                document.getElementById("range").disabled = false;
-                document.getElementById("range").max = results.length-1;
-                output = results;
-                changeReservoirStyle(output[0]*4/100);
-            }
-        },
-        error: function(xhr) { 
-
-        }
-    });
-}*/
-/*function fillTables(data, tableId){
-    var myTable = document.getElementById(tableId);
-    myTable.innerHTML = "";
-    for (var i=0; i<data.length; i++){
-        var newRow = myTable.insertRow(i);
-        var dayCell = newRow.insertCell(0);
-        dayCell.innerHTML = data[i][2];
-        dayCell.setAttribute("class", "firstColumn");
-        for (var j=3; j<data[0].length; j++){
-            var newCell = newRow.insertCell(j-2);
-            var input = document.createElement("INPUT");
-            input.setAttribute("type", "number");
-            input.value = data[i][j];
-            newCell.appendChild(input);
-            newCell.setAttribute("class", "otherColumns");
-        }
-    }
-}*/
-function fillTables(data, myTable){
+function fillTables(data, myTable, tableId){
     myTable.setData([]);
     if(data.length === 0){
     }else{
@@ -197,9 +159,34 @@ function fillTables(data, myTable){
             mainData.push(rowData);
         }
         myTable.setData(mainData);
+        if(tableId === "Branch #1"){
+            data_branch_1 = mainData;
+        }else if (tableId === "Branch #2"){
+            data_branch_2 = mainData;
+        }
     }
 }
-
+function fillVul(data){
+    if (data.length){
+        document.getElementById("reservoirStorageCapacity").value = data[0][1];
+        document.getElementById("averageAnnualSupply").value = data[0][2];
+        document.getElementById("meanAnnualPrecipitation").value = data[0][3];
+        document.getElementById("importDependence").value = data[0][4];
+        document.getElementById("annualWaterWithdrawals").value = data[0][5];
+        document.getElementById("GNP_capita").value = data[0][6];
+        document.getElementById("standardDeviationOfAnnualPrecipitation").value = data[0][7];
+        document.getElementById("annualRenewableWaterResources").value = data[0][8];
+        data[0].shift();
+        wrv = calculateWRV(data[0]);
+    }
+}
+function fillSoc(data){
+    if (data.length){
+        document.getElementById("renewableInternalFreshwaterResourcesPerCapita").value = data[0][1];
+        document.getElementById("HumanDevelopmentIndex").value = data[0][2];
+        swsi = calculateSWSI(data[0]);
+    }
+}
 function loadShapes(){
     drawingSource.clear();
     $.ajax({
@@ -328,3 +315,64 @@ function modifyFeature(feature){
         });
     } 
 }
+
+function saveVul(){
+    var inputElements = document.getElementsByClassName("vulnerability");
+    var inputValues = [];
+    for (var i=0;i<inputElements.length;i++){
+        var value = inputElements[i].value;
+        if (value === ""){
+            alert("Please fill in all values");
+            return false;
+        }
+        inputValues.push(inputElements[i].value);
+    }
+    $.ajax({
+        type : "POST",
+        url : "index_ajax_handler.php",
+        data: {
+            vulnerabilityUsername: document.getElementById("btnOptions").innerHTML,
+            vulnerabilityProjectName: document.getElementsByClassName("currentProject")[0].childNodes[0].innerHTML,
+            vulnerabilityData: JSON.stringify(inputValues)
+        },
+        dataType: 'text',
+        success : function(response) {
+            alert("Inputs saved successfully");
+            wrv = calculateWRV(inputValues);
+        },
+        error: function(xhr) { 
+
+        }
+    });  
+}
+
+function saveSoc(){
+    var inputElements = document.getElementsByClassName("social");
+    var inputValues = [];
+    for (var i=0;i<inputElements.length;i++){
+        var value = inputElements[i].value;
+        if (value === ""){
+            alert("Please fill in all values");
+            return false;
+        }
+        inputValues.push(inputElements[i].value);
+    }
+    $.ajax({
+        type : "POST",
+        url : "index_ajax_handler.php",
+        data: {
+            socialUsername: document.getElementById("btnOptions").innerHTML,
+            socialProjectName: document.getElementsByClassName("currentProject")[0].childNodes[0].innerHTML,
+            socialData: JSON.stringify(inputValues)
+        },
+        dataType: 'text',
+        success : function(response) {
+            alert("Inputs saved successfully");
+            swsi = calculateSWSI(inputValues);
+        },
+        error: function(xhr) { 
+
+        }
+    });
+}
+

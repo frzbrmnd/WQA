@@ -1,43 +1,68 @@
 # Water_Quality_Assessment
+Water_Quality_Assessment is a full-stack web application developed as a freelance project to support environmental monitoring and water-quality assessment. The system combines a JavaScript frontend with a PHP/PostgreSQL backend, and includes Python-based machine learning scripts to estimate key environmental parameters and compute several water-quality indices.
 
-Water_Quality_Assessment is a full-stack web application developed as a freelance project for processing, analyzing, and managing water-quality information. The system combines a PHP/JavaScript frontend with a PostgreSQL database backend, and includes Python-based machine learning scripts for analyzing user-submitted environmental data.
-
-Although originally built for a client, the project also represents my skills in environmental data processing, web development, and geospatially relevant data workflows, which align closely with my academic and research interests.
+Although originally built for a client, the project also represents my skills in data-driven Python analytics, web development, and geospatially relevant data workflows, which align closely with my academic and research interests.
 
 # Project Overview
 
-The platform provides an end-to-end workflow for:
+This application is designed for non-expert decision-makers and stakeholders involved in water-quality monitoring and management.
+It provides:
 
+- Automated computation of several water-quality indices, including trophic-state indicators and vulnerability-related metrics
 - Collecting and validating water-quality inputs
 
-- Performing automated ML-based analysis using Python scripts
+- Two ML models implemented in Python for predicting environmental quality parameters
 
-- Managing user accounts and secure authentication
+- A clean and accessible web-based dashboard
 
 - Running asynchronous AJAX operations for efficient data communication
 
 - Storing structured environmental data in PostgreSQL
 
-- Preparing datasets for further GIS or research-oriented processing
+- A reliable, scalable PostgreSQL structure for storing measurements and model outputs
 
-This project demonstrates my ability to bridge web development, database engineering, and data-driven Python analytics into a coherent system.
 
 # Key Features
 
-## Backend Machine Learning (Python)
-A set of Python scripts inside the project performs
+## Python-Based Parameter Estimation (Machine Learning Models)
+This project includes Python scripts that train and deploy XGBoost regression models to estimate key water-quality parameters such as Chlorophyll-a (CHLA) and Dissolved Oxygen (DO). Historical monitoring datasets are used for training, and models are exported as .sav files for backend use.
 
-- Dashboard Interface
-A central page for viewing and interacting with water-quality content.
+The deployed CGI scripts:
 
-- Asynchronous Backend Handling
-AJAX endpoints (index_ajax_handler.php, signup_ajax_handler.php) enable fast and responsive user interactions.
+- Load the trained models
 
-- Modular PHP Backend
-Reusable utility functions grouped in functions.php for clarity and extensibility.
+- Process and validate user inputs
 
-- Clean Frontend Structure
-Separate folders for styles, scripts, and images to maintain an organized layout.
+- Apply 5-day weighted averaging
 
-- User Authentication
-Registration, login, logout, and session management.
+- Generate real-time predictions for environmental parameters
+
+- Return results to the PHP/JavaScript frontend for visualization
+
+These machine-learning components enable non-expert users to obtain accurate, data-driven estimates that support water-quality assessment and index calculations.
+
+## PostgreSQL Database Integration
+
+The backend uses PostgreSQL to:
+
+- Store user input data
+
+- Organize computed indices and model outputs
+
+- Log results and maintain a consistent data structure
+
+- Support future extensions such as geospatial layers (PostGIS-ready)
+
+# Technologies Used
+
+- Python 3.x — ML models & parameter estimation
+
+- PostgreSQL — primary database
+
+- PHP — backend logic & authentication
+
+- JavaScript / AJAX — client–server interaction
+
+- HTML / CSS — UI layer
+
+- JSON — data exchange format

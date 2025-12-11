@@ -24,7 +24,7 @@ It provides:
 
 # Key Features
 
-## Python-Based Parameter Estimation (Machine Learning Models)
+### Python-Based Parameter Estimation (Machine Learning Models)
 This project includes Python scripts that train and deploy XGBoost regression models to estimate key water-quality parameters such as Chlorophyll-a (CHLA) and Dissolved Oxygen (DO). Historical monitoring datasets are used for training, and models are exported as .sav files for backend use.
 
 The deployed CGI scripts:
@@ -41,7 +41,7 @@ The deployed CGI scripts:
 
 These machine-learning components enable non-expert users to obtain accurate, data-driven estimates that support water-quality assessment and index calculations.
 
-## PostgreSQL Database Integration
+### PostgreSQL Database Integration
 
 The backend uses PostgreSQL to:
 
